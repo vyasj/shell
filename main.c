@@ -11,8 +11,21 @@ int main(int argc, char **argv) {
     printf("$ ");
     getline(&buffer, &bufsize, stdin);
 
-    if (strcmp(buffer, "exit\n") == 0) {
+    char *tok = strtok(buffer, " ");
+    if (strcmp(tok, "exit\n") == 0) {
       break;
+    }
+    char *cmd[8];
+    int cmd_idx = 0;
+    while (tok != NULL) {
+      cmd[cmd_idx] = tok;
+      tok = strtok(NULL, " ");
+      cmd_idx++;
+    }
+
+    pid_t pid = fork();
+    if (pid == 0) {
+      execve(cmd[0], cmd, NULL);
     }
   }
 
